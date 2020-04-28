@@ -56,28 +56,28 @@ public class MixinLevelLoadingScreen {
 		}
 	}
 
-	private static void prepareChunkMapBuffer(int absX, int absY, int size) {
+	private static void prepareChunkMapBuffer(int absX, int absY, int absSize) {
 		if (chunkMapQuad == null) {
 			chunkMapQuad = new VertexBuffer(vFormat);
 			bufferBuilder = new BufferBuilder(12 + 8);
 		}
 
 		bufferBuilder.begin(GL11.GL_QUADS, vFormat);
-		bufferBuilder.vertex(absX, absY, 0)              .texture(0, 0).next();
-		bufferBuilder.vertex(absX + size, absY, 0)       .texture(1, 0).next();
-		bufferBuilder.vertex(absX + size, absY + size, 0).texture(1, 1).next();
-		bufferBuilder.vertex(absX, absY + size, 0)       .texture(0, 1).next();
+		bufferBuilder.vertex(absX, absY, 0)                    .texture(0, 0).next();
+		bufferBuilder.vertex(absX + absSize, absY, 0)          .texture(1, 0).next();
+		bufferBuilder.vertex(absX + absSize, absY + absSize, 0).texture(1, 1).next();
+		bufferBuilder.vertex(absX, absY + absSize, 0)          .texture(0, 1).next();
 		bufferBuilder.end();
 
 		chunkMapQuad.upload(bufferBuilder);
 	}
 
-	private static void prepareResources(int absX, int absY, int size) {
+	private static void prepareResources(int absX, int absY, int size, int absSize) {
 		if (lastChunkMapAbsX != absX || lastChunkMapAbsY != absY || lastChunkMapSize != size) {
 			lastChunkMapAbsX = absX;
 			lastChunkMapAbsY = absY;
 
-			prepareChunkMapBuffer(absX, absY, size);
+			prepareChunkMapBuffer(absX, absY, absSize);
 		}
 
 		if (lastChunkMapSize != size) {
@@ -115,24 +115,15 @@ public class MixinLevelLoadingScreen {
 		int absX = centerX - absSize / 2;
 		int absY = centerY - absSize / 2;
 
-		prepareResources(absX, absY, absSize);
+		prepareResources(absX, absY, size, absSize);
 
 		final NativeImage chunkMapImage = chunkMapTexture.getImage();
 
 		for(int cx = 0; cx < size; ++cx) {
 			for(int cy = 0; cy < size; ++cy) {
 				ChunkStatus chunkStatus = progressProvider.getChunkStatus(cx, cy);
-				int x = cx * chunkSize;
-				int y = cy * chunkSize;
 				int color = STATUS_TO_COLOR.getInt(chunkStatus);
-
-				// Draw the chunk square
-				// Please let the javac gods unroll this
-				for (int px = 0; px < chunkSize; ++px) {
-					for (int py = 0; py < chunkSize; ++py) {
-						chunkMapImage.setPixelRgba(x+px, y+py, color);
-					}
-				}
+				chunkMapImage.setPixelRgba(cx, cy, color);
 			}
 		}
 
