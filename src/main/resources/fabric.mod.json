@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "optiglonk",
+  "version": "${version}",
+
+  "name": "OptiGlonk",
+  "description": "Optimizations for the parts of Minecraft nobody cares about.",
+  "authors": [
+    "Ancurio"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Sturmlilie/OptiGlonk",
+    "sources": "https://github.com/Sturmlilie/OptiGlonk"
+  },
+
+  "license": "LGPLv3",
+  "icon": "assets/optiglonk/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.ancurio.optiglonk.Main"
+    ]
+  },
+  "mixins": [
+    "optiglonk.mixin.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.15.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
