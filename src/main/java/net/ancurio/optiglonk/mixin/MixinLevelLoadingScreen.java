@@ -103,13 +103,11 @@ public class MixinLevelLoadingScreen {
 	 */
 	@Overwrite
 	public static void drawChunkMap(WorldGenerationProgressTracker progressProvider,
-	                                int centerX, int centerY, int two, int zero) {
+	                                int centerX, int centerY, int chunkSize, int zero) {
 		// Majong has these as parameters but actually never passes
 		// anything else in..
-		assert two == 2;
 		assert zero == 0;
 
-		final int chunkSize = 2;
 		int size = progressProvider.getSize();
 		int absSize = size * chunkSize;
 		int absX = centerX - absSize / 2;
